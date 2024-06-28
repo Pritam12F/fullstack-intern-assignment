@@ -5,13 +5,14 @@ import { setToken } from "@/redux/auth/auth.slice";
 import useAuthSession from "../hooks/useAuthSession";
 import { useAppDispatch } from "@/redux/store";
 import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
 
 const HomePage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const { user, setLogin } = useAuthSession();
-
+  const { toast } = useToast();
   const handleLogin = async () => {
     // Implement the logic to authenticate the user
     const user = await axios.post("/api/auth/login", { username, password });
@@ -47,7 +48,12 @@ const HomePage = () => {
               className="w-full px-4 py-2 mt-4 border rounded-md text-black"
             />
             <button
-              onClick={handleLogin}
+              onClick={() => {
+                handleLogin();
+                toast({
+                  title: "Signed in",
+                });
+              }}
               className="w-full px-4 py-2 mt-6 font-bold text-white bg-blue-500 rounded-md"
             >
               Login
