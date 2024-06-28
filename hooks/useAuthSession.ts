@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearAuth, setToken } from "@/redux/auth/auth.slice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
-import { log } from "console";
 
 const useAuthSession = () => {
   const dispatch = useDispatch();

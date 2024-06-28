@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "@/app/lib/secrets";
+import { JWT_SECRET } from "@/lib/secrets";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

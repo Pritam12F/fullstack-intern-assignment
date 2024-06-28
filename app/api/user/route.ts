@@ -1,6 +1,6 @@
-import { JWT_SECRET } from "@/app/lib/secrets";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "@/lib/secrets";
 
 export function GET(req: NextRequest) {
   const authHeader = req.headers.get("Authorization");
