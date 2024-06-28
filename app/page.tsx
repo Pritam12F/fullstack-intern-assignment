@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setToken } from "@/redux/auth/auth.slice";
 import useAuthSession from "../hooks/useAuthSession";
 import { useAppDispatch } from "@/redux/store";
@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 const HomePage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<any>({});
   const dispatch = useAppDispatch();
   const { user, setLogin } = useAuthSession();
   const { toast } = useToast();
@@ -19,6 +20,28 @@ const HomePage = () => {
     const token = user.data.token.split(" ")[1];
     localStorage.setItem("token", token);
     setLogin((login) => !login);
+  };
+
+  useEffect(() => {
+    validateForm();
+  }, [username, password]);
+
+  const validateForm = () => {
+    let error: { username: string | null; password: string | null } = {
+      username: null,
+      password: null,
+    };
+
+    if (!username) {
+      error.username = "Username must be entered";
+    }
+    if (!password) {
+      error.password = "Password must be entered";
+    } else if (password.length < 6) {
+      error.password = "Password must be of at least 6 length";
+    }
+
+    setErrors(error);
   };
 
   return (
@@ -40,6 +63,9 @@ const HomePage = () => {
               placeholder="Username"
               className="w-full px-4 py-2 mt-4 border rounded-md text-black"
             />
+            {errors?.username ? (
+              <p className="text-red-500">{errors.username}</p>
+            ) : null}
             <input
               type="password"
               value={password}
@@ -47,12 +73,21 @@ const HomePage = () => {
               placeholder="Password"
               className="w-full px-4 py-2 mt-4 border rounded-md text-black"
             />
+            {errors?.password ? (
+              <p className="text-red-500">{errors.password}</p>
+            ) : null}
             <button
               onClick={() => {
-                handleLogin();
-                toast({
-                  title: "Signed in",
-                });
+                if (username && password.length > 6) {
+                  handleLogin();
+                  toast({
+                    title: "Signed in",
+                  });
+                } else {
+                  toast({
+                    title: "Signed failed",
+                  });
+                }
               }}
               className="w-full px-4 py-2 mt-6 font-bold text-white bg-blue-500 rounded-md"
             >
