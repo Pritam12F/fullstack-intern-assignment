@@ -78,7 +78,7 @@ const HomePage = () => {
             ) : null}
             <button
               onClick={() => {
-                if (username && password.length > 6) {
+                if (username && password.length >= 6) {
                   handleLogin();
                   toast({
                     title: "Signed in",
